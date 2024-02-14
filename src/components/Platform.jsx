@@ -16,9 +16,18 @@ import wooLogo from "/src/assets/woo.png";
 import bcLogo from "/src/assets/bc.png";
 import salLogo from "/src/assets/sals.png";
 
-
 const Platform = ({ setStep }) => {
   const [value, setValue] = useState(null);
+
+  const handleEnterKey = (e) => {
+    if (e.key === "Enter") setStep((prev) => prev + 1);
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleEnterKey);
+
+    return () => document.removeEventListener("keydown", handleEnterKey);
+  }, []);
 
   const icon = {
     hidden: {
@@ -32,7 +41,24 @@ const Platform = ({ setStep }) => {
   };
 
   return (
-    <Box display={"flex"} alignItems={"center"} height={"100%"}>
+    <Box
+      display={"flex"}
+      alignItems={"center"}
+      height={"100%"}
+      component={motion.div}
+      initial={{
+        y: 20,
+        opacity: 0,
+      }}
+      animate={{
+        y: 0,
+        opacity: 1,
+      }}
+      transition={{
+        duration: 0.3,
+        ease: "easeIn",
+      }}
+    >
       <Box flex={1}>
         <Typography
           display={"flex"}
@@ -141,7 +167,7 @@ const RightCard = ({ value }) => {
         pathLength: 1,
         transition: {
           duration: 0.8,
-          delay: 0.2
+          delay: 0.2,
         },
       },
     },
@@ -253,9 +279,14 @@ const RightCard = ({ value }) => {
     const angle = 112;
     const offset = 0;
     const cal = (angle / icons.length) * i;
-    return `rotate(${
-      cal + offset
-    }deg) translateX(${r}px) translateY(-${r}px) rotate(-${cal}deg)`;
+    return {
+      initial: `rotate(${cal + offset}deg) translateX(${
+        r - 100
+      }px) translateY(-${r - 100}px) rotate(-${cal}deg)`,
+      final: `rotate(${
+        cal + offset
+      }deg) translateX(${r}px) translateY(-${r}px) rotate(-${cal}deg)`,
+    };
   }
 
   return (
@@ -273,6 +304,13 @@ const RightCard = ({ value }) => {
           position={"absolute"}
           top={ar.top}
           left={ar.left}
+          component={motion.div}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{
+            duration: 0.3,
+            delay: 0.35 + i * 0.07,
+          }}
         >
           <svg
             width="100%"
@@ -281,9 +319,9 @@ const RightCard = ({ value }) => {
             viewBox={ar.viewBox}
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path d={ar.line_path} stroke="#ededed" stroke-linecap="round" />
-            <path d={ar.head_path} stroke="#ededed" stroke-linecap="round" />
-            <circle {...ar.circle} fill="#ededed" />
+            <path d={ar.line_path} stroke="#f2f2f2" stroke-linecap="round" />
+            <path d={ar.head_path} stroke="#f2f2f2" stroke-linecap="round" />
+            <circle {...ar.circle} fill="#f2f2f2" />
             <motion.path
               d={ar.line_path}
               stroke="#4977F6"
@@ -325,16 +363,35 @@ const RightCard = ({ value }) => {
             border={"1px solid #eee"}
             sx={{
               aspectRatio: 1,
-              transform: calcTransform(i),
+              // transform: calcTransform(i),
             }}
+            component={motion.div}
+            initial={{ opacity: 0, transform: calcTransform(i).initial }}
+            animate={{ opacity: 1, transform: calcTransform(i).final }}
+            transition={{ duration: 0.4, delay: 0.07 * i, ease: "easeOut" }}
           >
-            <img style={{ objectFit: 'contain'}} src={e.logo} height={"60%"} width={"60%"} />
+            <img
+              style={{ objectFit: "contain" }}
+              src={e.logo}
+              height={"60%"}
+              width={"60%"}
+            />
           </Box>
         ))}
       </Box>
 
       {/* center */}
       <Box
+        component={motion.div}
+        initial={{
+          scale: 0,
+        }}
+        animate={{
+          scale: 1,
+        }}
+        transition={{
+          type: "spring",
+        }}
         height={"5rem"}
         sx={{
           aspectRatio: 1,

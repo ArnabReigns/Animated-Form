@@ -10,9 +10,10 @@ import FullName from "./components/FullName";
 import NameToCompany from "./components/NameToCompany";
 import Platform from "./components/Platform";
 import Products from "./components/Products";
+import Final from "./components/Final";
 
 const App = () => {
-  const [step, setStep] = useState(5);
+  const [step, setStep] = useState(1);
 
   const icon = {
     hidden: {
@@ -44,6 +45,7 @@ const App = () => {
           )}
           {step == 5 && <Platform setStep={setStep} />}
           {step == 6 && <Products setStep={setStep} />}
+          {step == 7 && <Final setStep={setStep} />}
         </Box>
       </Box>
     </Box>
